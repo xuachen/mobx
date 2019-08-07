@@ -12,7 +12,7 @@
  * - api/     Most of the public static methods exposed by the module can be found here.
  * - core/    Implementation of the MobX algorithm; atoms, derivations, reactions, dependency trees, optimizations. Cool stuff can be found here.
  * - types/   All the magic that is need to have observable objects, arrays and values is in this folder. Including the modifiers like `asFlat`.
- * - utils/   Utility stuff....
+ * - utils/   Utility stuff.....
  *
  */
 
