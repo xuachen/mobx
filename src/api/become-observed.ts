@@ -18,7 +18,7 @@ export function onBecomeObserved(
         | ObservableSet<any>,
     listener: Lambda
 ): Lambda
-export function onBecomeObserved<K, V = any>(
+export function onBecomeObserved<K, V = any>( //COMMENT
     value: ObservableMap<K, V> | Object,
     property: K,
     listener: Lambda
