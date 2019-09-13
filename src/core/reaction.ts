@@ -1,6 +1,5 @@
 import {
     $mobx,
-    fail,
     IDerivation,
     IDerivationState,
     IObservable,
@@ -120,7 +119,8 @@ export class Reaction implements IDerivation, IReactionPublic {
 
     track(fn: () => void) {
         if (this.isDisposed) {
-            fail("Reaction already disposed")
+            return
+            // console.warn("Reaction already disposed") // Note: Not a warning / error in mobx 4 either
         }
         startBatch()
         const notify = isSpyEnabled()
