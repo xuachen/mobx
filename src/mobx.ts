@@ -16,20 +16,21 @@
  *
  */
 
+import { getGlobal, spy, getDebugName, $mobx } from "./internal"
+
 if (typeof Proxy === "undefined" || typeof Symbol === "undefined") {
     throw new Error(
         "[mobx] MobX 5+ requires Proxy and Symbol objects. If your environment doesn't support Symbol or Proxy objects, please downgrade to MobX 4. For React Native Android, consider upgrading JSCore."
     )
 }
 
-declare const window: any
 try {
     // define process.env if needed
     // if this is not a production build in the first place
     // (in which case the expression below would be substituted with 'production')
     process.env.NODE_ENV
 } catch (e) {
-    const g = typeof window !== "undefined" ? window : global
+    const g = getGlobal()
     if (typeof process === "undefined") g.process = {}
     g.process.env = {}
 }
@@ -41,9 +42,10 @@ try {
         process.env.NODE_ENV !== "production" &&
         process.env.IGNORE_MOBX_MINIFY_WARNING !== "true"
     ) {
+        // trick so it doesn't get replaced
+        const varName = ["process", "env", "NODE_ENV"].join(".")
         console.warn(
-            // Template literal(backtick) is used for fix issue with rollup-plugin-commonjs https://github.com/rollup/rollup-plugin-commonjs/issues/344
-            `[mobx] you are running a minified build, but 'process.env.NODE_ENV' was not set to 'production' in your bundler. This results in an unnecessarily large and slow bundle`
+            `[mobx] you are running a minified build, but '${varName}' was not set to 'production' in your bundler. This results in an unnecessarily large and slow bundle`
         )
     }
 })()
@@ -153,8 +155,6 @@ export {
 } from "./internal"
 
 // Devtools support
-import { spy, getDebugName, $mobx } from "./internal"
-
 declare const __MOBX_DEVTOOLS_GLOBAL_HOOK__: { injectMobx: (any) => void }
 if (typeof __MOBX_DEVTOOLS_GLOBAL_HOOK__ === "object") {
     // See: https://github.com/andykog/mobx-devtools/

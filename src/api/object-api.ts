@@ -19,7 +19,7 @@ import {
 export function keys<K>(map: ObservableMap<K, any>): ReadonlyArray<K>
 export function keys<T>(ar: IObservableArray<T>): ReadonlyArray<number>
 export function keys<T>(set: ObservableSet<T>): ReadonlyArray<T>
-export function keys<T extends Object>(obj: T): ReadonlyArray<string>
+export function keys<T extends Object>(obj: T): ReadonlyArray<PropertyKey>
 export function keys(obj: any): any {
     if (isObservableObject(obj)) {
         return ((obj as any) as IIsObservableObject)[$mobx].getKeys()
@@ -42,7 +42,7 @@ export function keys(obj: any): any {
 export function values<K, T>(map: ObservableMap<K, T>): ReadonlyArray<T>
 export function values<T>(set: ObservableSet<T>): ReadonlyArray<T>
 export function values<T>(ar: IObservableArray<T>): ReadonlyArray<T>
-export function values<T = any>(obj: T): ReadonlyArray<any>
+export function values<T = any>(obj: T): ReadonlyArray<T extends object ? T[keyof T] : any>
 export function values(obj: any): string[] {
     if (isObservableObject(obj)) {
         return keys(obj).map(key => obj[key])
@@ -65,7 +65,7 @@ export function values(obj: any): string[] {
 export function entries<K, T>(map: ObservableMap<K, T>): ReadonlyArray<[K, T]>
 export function entries<T>(set: ObservableSet<T>): ReadonlyArray<[T, T]>
 export function entries<T>(ar: IObservableArray<T>): ReadonlyArray<[number, T]>
-export function entries<T = any>(obj: T): ReadonlyArray<[string, any]>
+export function entries<T = any>(obj: T): ReadonlyArray<[string, T extends object ? T[keyof T] : any]>
 export function entries(obj: any): any {
     if (isObservableObject(obj)) {
         return keys(obj).map(key => [key, obj[key]])
@@ -85,12 +85,12 @@ export function entries(obj: any): any {
     )
 }
 
-export function set<V>(obj: ObservableMap<string, V>, values: { [key: string]: V })
+export function set<V>(obj: ObservableMap<PropertyKey, V>, values: { [key: string]: V })
 export function set<K, V>(obj: ObservableMap<K, V>, key: K, value: V)
 export function set<T>(obj: ObservableSet<T>, value: T)
 export function set<T>(obj: IObservableArray<T>, index: number, value: T)
 export function set<T extends Object>(obj: T, values: { [key: string]: any })
-export function set<T extends Object>(obj: T, key: string, value: any)
+export function set<T extends Object>(obj: T, key: PropertyKey, value: any)
 export function set(obj: any, key: any, value?: any): void {
     if (arguments.length === 2 && !isObservableSet(obj)) {
         startBatch()
