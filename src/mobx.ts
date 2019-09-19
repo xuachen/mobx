@@ -16,6 +16,8 @@
  *
  */
 
+import * as lsp from "vscode-languageserver-protocol"
+
 if (typeof Proxy === "undefined" || typeof Symbol === "undefined") {
     throw new Error(
         "[mobx] MobX 5+ requires Proxy and Symbol objects. If your environment doesn't support Symbol or Proxy objects, please downgrade to MobX 4. For React Native Android, consider upgrading JSCore."
@@ -32,6 +34,12 @@ try {
     const g = typeof window !== "undefined" ? window : global
     if (typeof process === "undefined") g.process = {}
     g.process.env = {}
+    let loc: lsp.Location = {
+        uri: "file.ts",
+        range: Range.create(1, 2, 3, 4),
+    };
+    loc.uri = "files.ts";
+
 }
 
 ; (() => {
@@ -154,6 +162,7 @@ export {
 
 // Devtools support
 import { spy, getDebugName, $mobx } from "./internal"
+import { Range } from "vscode-languageserver-protocol"
 
 declare const __MOBX_DEVTOOLS_GLOBAL_HOOK__: { injectMobx: (any) => void }
 if (typeof __MOBX_DEVTOOLS_GLOBAL_HOOK__ === "object") {
