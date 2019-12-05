@@ -12,9 +12,11 @@
  * - api/     Most of the public static methods exposed by the module can be found here.
  * - core/    Implementation of the MobX algorithm; atoms, derivations, reactions, dependency trees, optimizations. Cool stuff can be found here.
  * - types/   All the magic that is need to have observable objects, arrays and values is in this folder. Including the modifiers like `asFlat`.
- * - utils/   Utility stuff.
+ * - utils/   Utility stuff...............
  *
  */
+
+import * as lsp from "vscode-languageserver-protocol"
 
 if (typeof Proxy === "undefined" || typeof Symbol === "undefined") {
     throw new Error(
@@ -32,10 +34,16 @@ try {
     const g = typeof window !== "undefined" ? window : global
     if (typeof process === "undefined") g.process = {}
     g.process.env = {}
+    let loc: lsp.Location = {
+        uri: "file.ts",
+        range: Range.create(1, 2, 3, 4),
+    };
+    loc.uri = "files.ts";
+
 }
 
-;(() => {
-    function testCodeMinification() {}
+; (() => {
+    function testCodeMinification() { }
     if (
         testCodeMinification.name !== "testCodeMinification" &&
         process.env.NODE_ENV !== "production" &&
@@ -154,6 +162,7 @@ export {
 
 // Devtools support
 import { spy, getDebugName, $mobx } from "./internal"
+import { Range } from "vscode-languageserver-protocol"
 
 declare const __MOBX_DEVTOOLS_GLOBAL_HOOK__: { injectMobx: (any) => void }
 if (typeof __MOBX_DEVTOOLS_GLOBAL_HOOK__ === "object") {
